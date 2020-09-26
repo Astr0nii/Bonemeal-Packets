@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#@#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "bmpack:large_bonemeal_packet"
+    },
+    "@": {
+      "item": "minecraft:chest"
+    }
+  },
+  "result": {
+    "item": "bmpack:small_bonemeal_crate",
+    "count": 1
+  }
+}

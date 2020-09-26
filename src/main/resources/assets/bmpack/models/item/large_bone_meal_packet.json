@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "bmpack:item/large_bone_meal_packet"
-  }
-}

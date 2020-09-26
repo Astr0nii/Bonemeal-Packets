@@ -3,10 +3,13 @@ package com.astr0ni.bonepackets.base;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.*;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -17,6 +20,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeKeys;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -25,6 +29,11 @@ public class PacketItem extends Item {
 
     public PacketItem(Settings settings) {
         super(settings);
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+        tooltip.add(new TranslatableText("item.bmpack.packetItem.tooltip"));
     }
 
     public ActionResult useOnBlock(ItemUsageContext context) {
@@ -67,12 +76,10 @@ public class PacketItem extends Item {
                     boolean IsBroken = false;
                     if (Durability < getMaxDamage()) {
                         IsBroken = true;
-                    } else if (Durability > getMaxDamage()){
-                        IsBroken = false;
                     }
                     if (IsBroken) {
                         stack.damage(1, Item.RANDOM, null);
-                    } else if (!IsBroken) {
+                    } else {
                         stack.decrement(1);
                     }
                 }
@@ -86,15 +93,13 @@ public class PacketItem extends Item {
 
     public boolean useOnGround(ItemStack stack, World world, BlockPos blockPos, @Nullable Direction facing) {
         if (world.getBlockState(blockPos).isOf(Blocks.WATER) && world.getFluidState(blockPos).getLevel() == 8) {
-            if (!(world instanceof ServerWorld)) {
-                return true;
-            } else {
+            if (world instanceof ServerWorld) {
                 label80:
-                for(int i = 0; i < 128; ++i) {
+                for (int i = 0; i < 128; ++i) {
                     BlockPos blockPos2 = blockPos;
                     BlockState blockState = Blocks.SEAGRASS.getDefaultState();
 
-                    for(int j = 0; j < i / 16; ++j) {
+                    for (int j = 0; j < i / 16; ++j) {
                         blockPos2 = blockPos2.add(RANDOM.nextInt(3) - 1, (RANDOM.nextInt(3) - 1) * RANDOM.nextInt(3) / 2, RANDOM.nextInt(3) - 1);
                         if (world.getBlockState(blockPos2).isFullCube(world, blockPos2)) {
                             continue label80;
@@ -104,15 +109,15 @@ public class PacketItem extends Item {
                     Optional<RegistryKey<Biome>> optional = world.method_31081(blockPos2);
                     if (Objects.equals(optional, Optional.of(BiomeKeys.WARM_OCEAN)) || Objects.equals(optional, Optional.of(BiomeKeys.DEEP_WARM_OCEAN))) {
                         if (i == 0 && facing != null && facing.getAxis().isHorizontal()) {
-                            blockState = (BlockState)((Block) BlockTags.WALL_CORALS.getRandom(world.random)).getDefaultState().with(DeadCoralWallFanBlock.FACING, facing);
+                            blockState = BlockTags.WALL_CORALS.getRandom(world.random).getDefaultState().with(DeadCoralWallFanBlock.FACING, facing);
                         } else if (RANDOM.nextInt(4) == 0) {
-                            blockState = ((Block)BlockTags.UNDERWATER_BONEMEALS.getRandom(RANDOM)).getDefaultState();
+                            blockState = BlockTags.UNDERWATER_BONEMEALS.getRandom(RANDOM).getDefaultState();
                         }
                     }
 
                     if (blockState.getBlock().isIn(BlockTags.WALL_CORALS)) {
-                        for(int k = 0; !blockState.canPlaceAt(world, blockPos2) && k < 4; ++k) {
-                            blockState = (BlockState)blockState.with(DeadCoralWallFanBlock.FACING, Direction.Type.HORIZONTAL.random(RANDOM));
+                        for (int k = 0; !blockState.canPlaceAt(world, blockPos2) && k < 4; ++k) {
+                            blockState = blockState.with(DeadCoralWallFanBlock.FACING, Direction.Type.HORIZONTAL.random(RANDOM));
                         }
                     }
 
@@ -121,24 +126,22 @@ public class PacketItem extends Item {
                         if (blockState2.isOf(Blocks.WATER) && world.getFluidState(blockPos2).getLevel() == 8) {
                             world.setBlockState(blockPos2, blockState, 3);
                         } else if (blockState2.isOf(Blocks.SEAGRASS) && RANDOM.nextInt(10) == 0) {
-                            ((Fertilizable)Blocks.SEAGRASS).grow((ServerWorld)world, RANDOM, blockPos2, blockState2);
+                            ((Fertilizable) Blocks.SEAGRASS).grow((ServerWorld) world, RANDOM, blockPos2, blockState2);
                         }
                     }
                     int Durability = stack.getMaxDamage();
                     boolean IsBroken = false;
                     if (Durability < getMaxDamage()) {
                         IsBroken = true;
-                    } else if (Durability > getMaxDamage()){
-                        IsBroken = false;
                     }
                     if (IsBroken) {
                         stack.damage(1, Item.RANDOM, null);
-                    } else if (!IsBroken) {
+                    } else {
                         stack.decrement(1);
                     }
                 }
-                return true;
             }
+            return true;
         } else {
             return false;
         }

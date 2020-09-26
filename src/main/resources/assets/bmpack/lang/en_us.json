@@ -1,6 +1,9 @@
 {
-  "item.bmpack.mini_bone_meal_packet": "Mini Bone Meal Packet",
-  "item.bmpack.bone_meal_packet": "Bone Meal Packet",
-  "item.bmpack.big_bone_meal_packet": "Big Bone Meal Packet",
-  "item.bmpack.large_bone_meal_packet": "Large Bone Meal Packet"
+  "item.bmpack.mini_bonemeal_packet": "Mini BoneMeal Packet",
+  "item.bmpack.bonemeal_packet": "BoneMeal Packet",
+  "item.bmpack.big_bonemeal_packet": "Big BoneMeal Packet",
+  "item.bmpack.large_bonemeal_packet": "Large BoneMeal Packet",
+  "item.bmpack.small_bonemeal_crate": "Small BoneMeal Crate",
+  "item.bmpack.bonemeal_crate": "BoneMeal Crate",
+  "item.bmpack.packetItem.tooltip": "Stores BoneMeal"
 }
